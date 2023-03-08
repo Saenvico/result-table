@@ -12,3 +12,25 @@
   font-size: calc(10px + 2vmin);
   color: rgb(0, 0, 0);
 }
+
+.teams__form {
+  margin-bottom: 20px;
+  transform: translateX(-142%);
+}
+
+.teams__table {
+  border: 2px solid blue;
+  width: 800px;
+  height: 200px;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.teams__th {
+  background-color: #c5c5c5;
+}
+
+.teams__td {
+  text-align: center;
+  border: 1px solid #c5c5c5;
+}
