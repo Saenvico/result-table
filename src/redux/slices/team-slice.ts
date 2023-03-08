@@ -21,28 +21,37 @@ const teamSlice = createSlice({
   initialState: initialState,
   reducers: {
     addTeam(state, action) {
-      const newTeam = action.payload;
-      const existingTeam = state.teams.find((team) => team.name === newTeam);
+      const newTeamName = action.payload;
+      const existingTeam = state.teams.find(
+        (team) => team.name === newTeamName
+      );
       state.changed = true;
-      const index = state.teams.findIndex((item) => item.name === newTeam);
+      const newTeam = {
+        id: new Date().toISOString(),
+        place: 1,
+        name: newTeamName,
+        played: 0,
+        win: 0,
+        draw: 0,
+        lost: 0,
+        points: 0,
+      };
 
-      //   const index = state.teams.map((i) => i.name).indexOf(newTeam);
       if (!existingTeam) {
+        state.teams.push(newTeam);
+        const index = state.teams.findIndex(
+          (item) => item.name === newTeamName
+        );
+        state.teams = state.teams.filter((item) => item.id !== newTeam.id);
         state.teams.push({
-          id: new Date().toISOString(),
-          place: index,
-          name: newTeam,
-          played: 0,
-          win: 0,
-          draw: 0,
-          lost: 0,
-          points: 0,
+          ...newTeam,
+          place: index + 1,
         });
+
         localStorage.setItem(
           'teams',
           JSON.stringify(state.teams.map((item) => item))
         );
-        // localStorage.setItem('totalTeams', JSON.stringify(state.totalTeams));
       }
     },
     fetchTeams(state, action) {
