@@ -13,7 +13,7 @@ const ScoresFormItem: React.FC<{ index: number; item: any[] }> = (props) => {
     const team2Result = team2InputRef.current!.value;
 
     if (team1Result.trim().length === 0 || team2Result.trim().length === 0) {
-      console.log("Please inser match results")
+      console.log('Please insert match results');
       return;
     }
 
@@ -56,21 +56,24 @@ const ScoresFormItem: React.FC<{ index: number; item: any[] }> = (props) => {
     );
 
     dispatch(teamActions.sortTeams());
+
+    team1InputRef.current!.value = '';
+    team2InputRef.current!.value = '';
   };
 
   return (
     <form onSubmit={submitHandler} className="scores__form">
       <div className="scores__list">
         {props.item.map((a, index) => (
-          <div key={a.id} className="scores__list">
+          <div key={a.id} className=" ">
             {
               <div>
                 {index === 0 && (
                   <div className="scores__list">
-                    <div>{a.name}</div>
+                    <div className="scores__name">{a.name}</div>
                     <input
                       type="number"
-                      id="text"
+                      min="0"
                       ref={team1InputRef}
                       className="scores__input"
                     />
@@ -81,11 +84,11 @@ const ScoresFormItem: React.FC<{ index: number; item: any[] }> = (props) => {
                     <div>:</div>
                     <input
                       type="number"
-                      id="text"
+                      min="0"
                       ref={team2InputRef}
                       className="scores__input"
                     />
-                    <div>{a.name}</div>
+                    <p className="scores__name">{a.name}</p>
                   </div>
                 )}
               </div>
@@ -93,7 +96,7 @@ const ScoresFormItem: React.FC<{ index: number; item: any[] }> = (props) => {
           </div>
         ))}
       </div>
-      <button>Add</button>
+      <button className="scores__list">Add</button>
     </form>
   );
 };

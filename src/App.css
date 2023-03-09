@@ -3,7 +3,7 @@
 }
 
 .App-header {
-  background-color: #e0e0e0;
+  background-color: #fefefe;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -37,6 +37,8 @@
 
 .scores__form {
   display: flex;
+  width: 500px;
+  margin: 3px;
 }
 
 .scores__list {
@@ -44,14 +46,10 @@
 }
 
 .scores__input {
-  width: 50px;
+  width: 40px;
   margin: 0 5px;
 }
 
-.scores__name{
-  margin: 0 50px; 
-}
-
-.scores__list--removed {
-  display: none;
+.scores__name {
+  margin: 0 50px;
 }

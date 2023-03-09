@@ -8,16 +8,15 @@ const NewTeamInput: React.FC = () => {
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-
     const name = teamNameInputRef.current!.value;
 
     if (name.trim().length === 0) {
-      console.log("Name field should not be empty")
+      console.log('Name field should not be empty');
       return;
     }
 
     dispatch(teamActions.addTeam(name));
-    dispatch(teamActions.addMatchInput(name));
+    dispatch(teamActions.addMatchInput());
 
     teamNameInputRef.current!.value = '';
   };

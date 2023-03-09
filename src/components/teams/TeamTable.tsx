@@ -4,7 +4,6 @@ import TeamTableItem from './TeamTableItem';
 
 const TeamTable: React.FC = () => {
   const teamsList = useAppSelector((state) => state.team.teams);
-console.log(teamsList, 'teamsList');
   return (
     <table className="teams__table">
       <tbody>
