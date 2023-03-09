@@ -8,31 +8,21 @@ const ScoresListItem = () => {
       {matchesList.length > 0 ? (
         matchesList.map((item, index) => (
           <li key={index} className="scores__list">
-            {item.map((a: any, index) => (
-              <div key={a.id} className="scores__list">
-                {index === 0 && (
-                  <div className="scores__list">
-                    <div>{a.name}</div>
-                  </div>
-                )}
-                {index === 1 && (
-                  <div className="scores__list">
-                    <div>{a}</div>
-                  </div>
-                )}
-                {index === 2 && (
-                  <div className="scores__list">
-                    <div>:</div>
-                    <div>{a}</div>
-                  </div>
-                )}
-                {index === 3 && (
-                  <div className="scores__list">
-                    <div>{a.name}</div>
-                  </div>
-                )}
+            <div key={item.match1.id} className="scores__list">
+              <div className="scores__list scores__name">
+                <div>{item.match1.name}</div>
               </div>
-            ))}
+              <div className="scores__list">
+                <div>{item.result1}</div>
+              </div>
+              <div className="scores__list">
+                <div>:</div>
+                <div>{item.result2}</div>
+              </div>
+              <div className="scores__list scores__name">
+                <div>{item.match2.name}</div>
+              </div>
+            </div>
           </li>
         ))
       ) : (

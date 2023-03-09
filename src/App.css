@@ -34,3 +34,24 @@
   text-align: center;
   border: 1px solid #c5c5c5;
 }
+
+.scores__form {
+  display: flex;
+}
+
+.scores__list {
+  display: flex;
+}
+
+.scores__input {
+  width: 50px;
+  margin: 0 5px;
+}
+
+.scores__name{
+  margin: 0 50px; 
+}
+
+.scores__list--removed {
+  display: none;
+}

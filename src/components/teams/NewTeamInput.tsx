@@ -12,11 +12,13 @@ const NewTeamInput: React.FC = () => {
     const name = teamNameInputRef.current!.value;
 
     if (name.trim().length === 0) {
-      // throw an error
+      console.log("Name field should not be empty")
       return;
     }
 
     dispatch(teamActions.addTeam(name));
+    dispatch(teamActions.addMatchInput(name));
+
     teamNameInputRef.current!.value = '';
   };
 

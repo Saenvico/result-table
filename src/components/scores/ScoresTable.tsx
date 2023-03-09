@@ -4,24 +4,16 @@ import ScoresInputItem from './ScoresInputItem';
 import ScoresTableItem from './ScoresTableItem';
 
 const ScoresTable = () => {
-  const teamsList = useAppSelector((state) => state.team.teams);
-  const matchesList = useAppSelector((state) => state.team.matchesInputs);
-
-  const uniquePairs = (arr: any[]) =>
-    arr.flatMap((item1, index1) =>
-      arr.flatMap((item2, index2) => (index1 > index2 ? [[item1, item2]] : []))
-    );
-
-  const matchPairs = uniquePairs(teamsList);
-  console.log(matchesList.length, 'lken');
-  console.log(matchesList, 'lken');
+  const matchesInputs = useAppSelector((state) => state.team.matchesInputs);
 
   return (
     <Fragment>
       <ScoresTableItem />
-      {matchesList.length > 0 ? (
-        matchesList.map((item, index) => (
-          <ScoresInputItem key={index} index={index} item={item} />
+      {matchesInputs.length > 0 ? (
+        matchesInputs.map((item, index) => (
+          <div key={index}>
+            {item.length < 3 && <ScoresInputItem index={index} item={item} />}
+          </div>
         ))
       ) : (
         <div>Please add more Teams</div>

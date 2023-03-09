@@ -13,7 +13,7 @@ const ScoresFormItem: React.FC<{ index: number; item: any[] }> = (props) => {
     const team2Result = team2InputRef.current!.value;
 
     if (team1Result.trim().length === 0 || team2Result.trim().length === 0) {
-      // throw an error
+      console.log("Please inser match results")
       return;
     }
 
@@ -31,15 +31,6 @@ const ScoresFormItem: React.FC<{ index: number; item: any[] }> = (props) => {
         ? 'draw'
         : 'lost';
 
-    // dispatch(
-    //   teamActions.addMatchResult({
-    //     team1: props.item[0],
-    //     team2: props.item[1],
-    //     team1Result: team1Result,
-    //     team2Result: team2Result,
-    //   })
-    // );
-
     dispatch(
       teamActions.updateTeam({
         team: props.item[0],
@@ -54,7 +45,7 @@ const ScoresFormItem: React.FC<{ index: number; item: any[] }> = (props) => {
       })
     );
 
-    // dispatch(teamActions.removeMatchInput(props.index));
+    dispatch(teamActions.removeMatchInput(props.index));
 
     dispatch(
       teamActions.addMatchResultArray({
@@ -67,41 +58,38 @@ const ScoresFormItem: React.FC<{ index: number; item: any[] }> = (props) => {
     dispatch(teamActions.sortTeams());
   };
 
-  // const handleDelete = (indexToDelete) => {
-  //   setCats((existingCats) =>
-  //     existingCats.filter((_, index) => index !== indexToDelete)
-  //   );
-  // };
-
   return (
     <form onSubmit={submitHandler} className="scores__form">
       <div className="scores__list">
         {props.item.map((a, index) => (
           <div key={a.id} className="scores__list">
-            {' '}
-            {index === 0 && (
-              <div className="scores__list">
-                <div>{a.name}</div>
-                <input
-                  type="number"
-                  id="text"
-                  ref={team1InputRef}
-                  className="scores__input"
-                />
+            {
+              <div>
+                {index === 0 && (
+                  <div className="scores__list">
+                    <div>{a.name}</div>
+                    <input
+                      type="number"
+                      id="text"
+                      ref={team1InputRef}
+                      className="scores__input"
+                    />
+                  </div>
+                )}
+                {index > 0 && (
+                  <div className="scores__list">
+                    <div>:</div>
+                    <input
+                      type="number"
+                      id="text"
+                      ref={team2InputRef}
+                      className="scores__input"
+                    />
+                    <div>{a.name}</div>
+                  </div>
+                )}
               </div>
-            )}
-            {index > 0 && (
-              <div className="scores__list">
-                <div>:</div>
-                <input
-                  type="number"
-                  id="text"
-                  ref={team2InputRef}
-                  className="scores__input"
-                />
-                <div>{a.name}</div>
-              </div>
-            )}
+            }
           </div>
         ))}
       </div>

@@ -4,14 +4,16 @@ import { Team } from '../../components/models/team';
 type teamsInitialState = {
   changed: boolean;
   teams: Team[];
-  matches: {}[][];
+  matches: MatchResult[];
   matchesInputs: {}[][];
 };
 
-const uniquePairs = (arr: any[]) =>
-  arr.flatMap((item1, index1) =>
-    arr.flatMap((item2, index2) => (index1 > index2 ? [[item1, item2]] : []))
-  );
+type MatchResult = {
+  match1: Team;
+  result1: number;
+  result2: number;
+  match2: Team;
+};
 
 const teamsItems =
   localStorage.getItem('teams') !== null
@@ -28,12 +30,11 @@ const matchesInputsItems =
     ? JSON.parse(localStorage.getItem('matchesInputs') || '{}')
     : [];
 
-
 const initialState: teamsInitialState = {
   changed: false,
   teams: teamsItems,
   matches: matchItems,
-  matchesInputs: uniquePairs(teamsItems),
+  matchesInputs: matchesInputsItems,
 };
 
 const teamSlice = createSlice({
@@ -46,47 +47,44 @@ const teamSlice = createSlice({
         (team) => team.name === newTeamName
       );
       state.changed = true;
-      const newTeam = {
-        id: new Date().toISOString(),
-        place: 1,
-        name: newTeamName,
-        played: 0,
-        win: 0,
-        draw: 0,
-        lost: 0,
-        points: 0,
-      };
 
       if (!existingTeam) {
-        state.teams.push(newTeam);
-        const index = state.teams.findIndex(
-          (item) => item.name === newTeamName
-        );
-        state.teams = state.teams.filter((item) => item.id !== newTeam.id);
         state.teams.push({
-          ...newTeam,
-          place: index + 1,
+          id: new Date().toISOString(),
+          place: 0,
+          name: newTeamName,
+          played: 0,
+          win: 0,
+          draw: 0,
+          lost: 0,
+          points: 0,
         });
-
         localStorage.setItem(
           'teams',
           JSON.stringify(state.teams.map((item) => item))
         );
       }
     },
-    fetchTeams(state, action) {
-      state.teams = action.payload.teams;
-    },
-    fetchMatches(state, action) {
-      state.matches = action.payload.matches;
-    },
-    fetchMatchesInputs(state, action) {
-      state.matchesInputs = uniquePairs(teamsItems);
+    addMatchInput(state, action) {
+        //perdaryti kad poros butu nuo vardo
+      const uniquePairs = (arr: any[]) =>
+        arr.flatMap((item1, index1) =>
+          arr.flatMap((item2, index2) =>
+            index1 > index2 ? [[item1, item2]] : []
+          )
+        );
+        const teamEl = state.teams.filter((x) => x.name === action.payload);
+        // state.matchesInputs.push(teamEl);
+      state.matchesInputs = uniquePairs([...state.teams]);
+      //   state.matchesInputs = [...state.matchesInputs, ...newArray];
+      //   state.matchesInputs = state.matchesInputs.filter(
+      //     (item, pos) => state.matchesInputs.indexOf(item) === pos
+      //   );
+
       localStorage.setItem(
         'matchesInputs',
-        JSON.stringify(state.matchesInputs)
+        JSON.stringify(state.matchesInputs.map((item) => item))
       );
-      console.log(uniquePairs(teamsItems), 'matchesInputsItems22');
     },
     removeMatchInput(state, action) {
       const id = action.payload;
@@ -98,7 +96,20 @@ const teamSlice = createSlice({
       //   let newArray = [...state.matchesInputs];
       //   state.matchesInputs = newArray.splice(id, 1);
 
+      // const handleDelete = (indexToDelete) => {
+      //   setCats((existingCats) =>
+      //     existingCats.filter((_, index) => index !== indexToDelete)
+      //   );
+      // };
+
       if (id > -1) {
+        //   state.matchesInputs.filter((_, index) => index !== id);
+
+        // state.matchesInputs[id] = [
+        //   ...state.matchesInputs[id],
+        //   { visible: 'false' },
+        // ];
+        // state.matchesInputs = [...state.matchesInputs[id] + {visible: none}];
         state.matchesInputs.splice(id, 1);
         localStorage.setItem(
           'matchesInputs',
@@ -107,11 +118,15 @@ const teamSlice = createSlice({
       }
     },
     addMatchResultArray(state, action) {
-      const newMatch = action.payload.teams;
+      const newMatch1 = action.payload.teams[0];
+      const newMatch2 = action.payload.teams[1];
       state.changed = true;
-      newMatch.splice(1, 0, action.payload.team1Result);
-      newMatch.splice(2, 0, action.payload.team2Result);
-      state.matches.push(...newMatch);
+      state.matches.push({
+        match1: newMatch1,
+        result1: action.payload.team1Result,
+        result2: action.payload.team2Result,
+        match2: newMatch2,
+      });
       localStorage.setItem(
         'matches',
         JSON.stringify(state.matches.map((item) => item))
@@ -120,12 +135,11 @@ const teamSlice = createSlice({
     updateTeam(state, action) {
       const team = action.payload.team;
       const result = action.payload.result;
-
       const existingTeam = state.teams.find((item) => item.name === team.name);
-
+      console.log(result, team, 'team');
+      console.log(state.teams, 'state.teams');
       if (existingTeam) {
-        state.teams = state.teams.filter((item) => item.id !== team.id);
-        const updatedTeam: any = {
+        const updatedTeam: Team = {
           ...existingTeam,
           played: team.played + 1,
           win: result === 'win' ? team.win + 1 : team.win,
@@ -138,7 +152,16 @@ const teamSlice = createSlice({
               ? team.points + 1
               : team.points,
         };
+        console.log(updatedTeam, 'updatedTeam');
+        console.log(state.teams, 'state.teams before removal ');
+
+        state.teams = state.teams.filter((item) => item.id !== team.id);
+        console.log(state.teams, 'state.teams after removal ');
+
         state.teams.push(updatedTeam);
+
+        console.log(state.teams, 'state.teams after push');
+
         localStorage.setItem(
           'teams',
           JSON.stringify(state.teams.map((item) => item))
@@ -147,8 +170,12 @@ const teamSlice = createSlice({
     },
     sortTeams(state) {
       state.teams.sort(function (a, b) {
-        return a.points - b.points;
+        return b.points - a.points;
       });
+      localStorage.setItem(
+        'teams',
+        JSON.stringify(state.teams.map((item) => item))
+      );
     },
   },
 });

@@ -4,7 +4,7 @@ import TeamTableItem from './TeamTableItem';
 
 const TeamTable: React.FC = () => {
   const teamsList = useAppSelector((state) => state.team.teams);
-
+console.log(teamsList, 'teamsList');
   return (
     <table className="teams__table">
       <tbody>
@@ -17,12 +17,12 @@ const TeamTable: React.FC = () => {
           <th>Lost</th>
           <th>Points</th>
         </tr>
-        {teamsList.map((item: Team) => (
+        {teamsList.map((item: Team, index) => (
           <TeamTableItem
             id={item.id}
             key={item.id}
             name={item.name}
-            place={item.place}
+            place={index + 1}
             played={item.played}
             win={item.win}
             draw={item.draw}
